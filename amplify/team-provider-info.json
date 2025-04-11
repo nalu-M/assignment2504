@@ -19,5 +19,26 @@
         "formapi": {}
       }
     }
+  },
+  "deva": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-assignment2504-deva-6e8b8-authRole",
+      "UnauthRoleArn": "arn:aws:iam::314146308178:role/amplify-assignment2504-deva-6e8b8-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::314146308178:role/amplify-assignment2504-deva-6e8b8-authRole",
+      "Region": "ap-southeast-2",
+      "DeploymentBucketName": "amplify-assignment2504-deva-6e8b8-deployment",
+      "UnauthRoleName": "amplify-assignment2504-deva-6e8b8-unauthRole",
+      "StackName": "amplify-assignment2504-deva-6e8b8",
+      "StackId": "arn:aws:cloudformation:ap-southeast-2:314146308178:stack/amplify-assignment2504-deva-6e8b8/522949f0-16d8-11f0-af64-0a5ef503f6ad",
+      "AmplifyAppId": "d3nq04ta2li924"
+    },
+    "categories": {
+      "auth": {
+        "assignment25046b2b1368": {}
+      },
+      "api": {
+        "formapi": {}
+      }
+    }
   }
 }
