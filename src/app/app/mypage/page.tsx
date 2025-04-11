@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Auth } from "aws-amplify";
 import type { CognitoUser } from "amazon-cognito-identity-js";
-import LogOutButton from "../ui/logout-button";
+import LogOutButton from "@/app/app/mypage/_components/logout-button";
 
 type UserAttributes = {
     sub: string;

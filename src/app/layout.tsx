@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "../styles/globals.css";
-import Nav from './ui/nav';
+import "@/styles/globals.css";
+import Nav from '@/app/navigation/nav';
 import React from 'react';
-import './amplify-client'; // ← ✅ クライアントサイドで初期化されるように import だけする
+import '@/app/amplify-config/amplify-config';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

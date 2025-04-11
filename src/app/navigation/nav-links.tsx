@@ -5,11 +5,11 @@ import { usePathname } from 'next/navigation';
 
 const navigations = [
     { id: 1, name: "ホーム", href: "/" },
-    { id: 2, name: "リスト", href: "/list" },
-    { id: 3, name: "マイページ", href: "/mypage" },
-    { id: 4, name: "送信", href: "/form" },
-    { id: 5, name: "ログイン", href: "/login" },
-    { id: 6, name: "登録", href: "/signup" },
+    { id: 2, name: "リスト", href: "/app/list" },
+    { id: 3, name: "マイページ", href: "/app/mypage" },
+    { id: 4, name: "送信", href: "/app/form" },
+    { id: 5, name: "ログイン", href: "/app/login" },
+    { id: 6, name: "登録", href: "/app/signup" },
 ];
 
 export default function NavLinks() {
