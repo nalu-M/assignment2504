@@ -1,24 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { API, Auth } from 'aws-amplify';
-import { createFormEntry } from '@/graphql/mutations';
+import { useState } from '@/hooks/use-state';
+import { useEffect } from '@/hooks/use-effect';
+import { useRouter } from '@/hooks/use-router';
+import { isAuthenticated } from '@/lib/auth/check-user';
+import { submitFormEntry, FormData } from '@/lib/api/submit-form';
 
 export default function FormPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState<FormData>({ name: '', email: '', message: '' });
   const [isAuthChecked, setIsAuthChecked] = useState(false);
 
-  // ログイン確認
   useEffect(() => {
-    Auth.currentAuthenticatedUser()
-      .then(() => {
-        setIsAuthChecked(true);
-      })
-      .catch(() => {
-        router.push('/login'); // ログインしていなければリダイレクト
-      });
+    isAuthenticated()
+      .then(() => setIsAuthChecked(true))
+      .catch(() => router.push('/login'));
   }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -29,12 +25,7 @@ export default function FormPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-
-      await API.graphql({
-        query: createFormEntry,
-        variables: { input: formData },
-        authMode: 'AMAZON_COGNITO_USER_POOLS',
-      });
+      await submitFormEntry(formData);
       alert('送信完了！');
     } catch (err) {
       console.error('送信失敗:', err);

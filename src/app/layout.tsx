@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/globals.css";
-import Nav from '@/app/navigation/nav';
+import Nav from '@/app/_components/nav';
 import React from 'react';
-import '@/app/amplify-config/amplify-config';
+import '@/lib/amplify-configure';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

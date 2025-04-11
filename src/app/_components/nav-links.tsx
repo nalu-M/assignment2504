@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import Link from '@/components/Link';
+import { usePathname } from '@/hooks/use-pathname';
 
 const navigations = [
     { id: 1, name: "ホーム", href: "/" },

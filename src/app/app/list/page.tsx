@@ -1,19 +1,8 @@
-// app/form/list.tsx
 'use client';
 
-import { useEffect, useState } from 'react';
-import { API, graphqlOperation } from 'aws-amplify';
-import { GraphQLResult } from '@aws-amplify/api-graphql';
-import { listFormEntries } from '@/graphql/queries';
-import { ListFormEntriesQuery } from '@/API';
-
-type FormEntry = {
-    id: string;
-    name: string;
-    email: string;
-    message: string;
-  };
-  
+import { useEffect } from '@/hooks/use-effect';
+import { useState } from '@/hooks/use-state';
+import { fetchFormEntries, FormEntry } from '@/lib/api/fetch-form';
 
 export default function FormListPage() {
   const [entries, setEntries] = useState<FormEntry[]>([]);
@@ -21,18 +10,10 @@ export default function FormListPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await API.graphql(
-          graphqlOperation(listFormEntries)
-        );
-
-        const result = response as GraphQLResult<ListFormEntriesQuery>;
-        const items = result.data?.listFormEntries?.items;
-
-        if (items) {
-          setEntries(items as FormEntry[]);
-        }
+        const items = await fetchFormEntries();
+        setEntries(items);
       } catch (error) {
-          console.error('データ取得失敗:', error);
+        console.error('データ取得失敗:', error);
       }
     };
 
