@@ -7,7 +7,7 @@ import { Auth } from 'aws-amplify';
 export const logout = async (): Promise<void> => {
   try {
     await Auth.signOut();
-  } catch (error) {
+  } catch {
     throw new Error("ログアウトに失敗しました");
   }
 };
