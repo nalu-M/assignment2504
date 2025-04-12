@@ -14,7 +14,7 @@ export default function FormPage() {
   useEffect(() => {
     isAuthenticated()
       .then(() => setIsAuthChecked(true))
-      .catch(() => router.push('/login'));
+      .catch(() => router.push('/app/login'));
   }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

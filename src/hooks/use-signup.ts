@@ -40,7 +40,7 @@ export function useSignUp() {
     try {
       setLoading(true);
       await confirmSignUp(email, code);
-      router.push('/login');
+      router.push('/app/login');
     } catch (err) {
       setError(err instanceof Error ? err.message : '認証に失敗しました');
     } finally {

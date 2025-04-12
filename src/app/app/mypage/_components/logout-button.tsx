@@ -26,7 +26,7 @@ const LogOutButton = () => {
     try {
       await logout();
       setLogin(false);
-      router.push("/login");
+      router.push("/app/login");
     } catch (error) {
       console.error(error);
     }

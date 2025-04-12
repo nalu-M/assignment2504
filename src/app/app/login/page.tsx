@@ -18,7 +18,7 @@ export default function LogIn() {
 
     try {
       await signIn(email, password); // ← 切り出した関数を使用
-      router.push('/mypage');
+      router.push('/app/mypage');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'ログインに失敗しました');
     } finally {
