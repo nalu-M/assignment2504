@@ -4,7 +4,6 @@ import { useEffect } from '@/hooks/use-effect';
 import { useUserContext } from '@/features/user/user-context';
 import { getCurrentUser } from '@/lib/auth/get-current-user';
 import LogOutButton from '@/app/app/mypage/_components/logout-button';
-import type { CognitoUser } from 'amazon-cognito-identity-js';
 
 type UserAttributes = {
   sub: string;

@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { useRouter } from '@/hooks/use-router';
 import { useUserContext } from '@/features/user/user-context';
 import { useFormContext } from '@/features/user/form-context';
-import { isAuthenticated } from '@/lib/auth/check-user';
 import { submitFormEntry } from '@/lib/api/submit-form';
 
 export default function FormPage() {
