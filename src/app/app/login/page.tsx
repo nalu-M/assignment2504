@@ -2,7 +2,13 @@
 
 import { useState } from '@/hooks/use-state';
 import { useRouter } from '@/hooks/use-router';
-import { signIn } from '@/lib/auth/signin'; // ← ここで import
+import { signIn } from '@/lib/auth/signin';
+import { z } from 'zod';
+
+const loginSchema = z.object({
+  email: z.string().email('正しいメールアドレスを入力してください'),
+  password: z.string().min(6, 'パスワードは6文字以上で入力してください'),
+});
 
 export default function LogIn() {
   const router = useRouter();
@@ -10,14 +16,27 @@ export default function LogIn() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
 
   const handleLogIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true);
     setError('');
+    setFieldErrors({});
+
+    const result = loginSchema.safeParse({ email, password });
+
+    if (!result.success) {
+      const errs = result.error.flatten().fieldErrors;
+      setFieldErrors({
+        email: errs.email?.[0],
+        password: errs.password?.[0],
+      });
+      return;
+    }
 
     try {
-      await signIn(email, password); // ← 切り出した関数を使用
+      setLoading(true);
+      await signIn(email, password);
       router.push('/app/mypage');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'ログインに失敗しました');
@@ -41,6 +60,7 @@ export default function LogIn() {
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
+            {fieldErrors.email && <p className="text-red-500 text-sm mt-1">{fieldErrors.email}</p>}
           </div>
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2">パスワード</label>
@@ -51,6 +71,9 @@ export default function LogIn() {
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
+            {fieldErrors.password && (
+              <p className="text-red-500 text-sm mt-1">{fieldErrors.password}</p>
+            )}
           </div>
           <button
             type="submit"
