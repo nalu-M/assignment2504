@@ -3,12 +3,7 @@
 import { useState } from '@/hooks/use-state';
 import { useRouter } from '@/hooks/use-router';
 import { signIn } from '@/lib/auth/signin';
-import { z } from 'zod';
-
-const loginSchema = z.object({
-  email: z.string().email('正しいメールアドレスを入力してください'),
-  password: z.string().min(6, 'パスワードは6文字以上で入力してください'),
-});
+import { loginSchema } from '@/lib/validation/login-schema';
 
 export default function LogIn() {
   const router = useRouter();
