@@ -1,21 +1,24 @@
 'use client';
 
-import { useState } from '@/hooks/use-state';
-import { useEffect } from '@/hooks/use-effect';
+import { useEffect } from 'react';
 import { useRouter } from '@/hooks/use-router';
+import { useUserContext } from '@/features/user/user-context';
+import { useFormContext } from '@/features/user/form-context';
 import { isAuthenticated } from '@/lib/auth/check-user';
-import { submitFormEntry, FormData } from '@/lib/api/submit-form';
+import { submitFormEntry } from '@/lib/api/submit-form';
 
 export default function FormPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState<FormData>({ name: '', email: '', message: '' });
-  const [isAuthChecked, setIsAuthChecked] = useState(false);
+  const { state: userState } = useUserContext();
+  const { formData, setFormData } = useFormContext();
+  const { user, loading } = userState;
 
+  // 認証が確認された後にフォームが表示される
   useEffect(() => {
-    isAuthenticated()
-      .then(() => setIsAuthChecked(true))
-      .catch(() => router.push('/app/login'));
-  }, [router]);
+    if (!loading && !user) {
+      router.push('/app/login');
+    }
+  }, [loading, user, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -27,12 +30,14 @@ export default function FormPage() {
     try {
       await submitFormEntry(formData);
       alert('送信完了！');
+      // フォーム送信後にデータをリセット
+      setFormData({ name: '', email: '', message: '' });
     } catch (err) {
       console.error('送信失敗:', err);
     }
   };
 
-  if (!isAuthChecked) {
+  if (loading || !user) {
     return <p className="text-center mt-20">認証を確認中...</p>;
   }
 

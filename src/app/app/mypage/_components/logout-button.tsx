@@ -1,38 +1,34 @@
 'use client';
 
-import { useState } from '@/hooks/use-state';
-import { useEffect } from '@/hooks/use-effect';
+import { useEffect } from 'react';
 import { useRouter } from '@/hooks/use-router';
-import { isAuthenticated } from '@/lib/auth/check-user';
-import { logout } from '@/lib/auth/logout';
+import { useUserContext } from '@/features/user/user-context';
+import { logout } from '@/lib/auth/logout'; // 必要に応じて調整
 
 const LogOutButton = () => {
   const router = useRouter();
-  const [login, setLogin] = useState<boolean>(false);
+  const { state, dispatch } = useUserContext();
+  const { user, loading } = state;
 
+  // ログイン状態のチェックとログアウト処理
   useEffect(() => {
-    const checkLogin = async () => {
-      const result = await isAuthenticated();
-      setLogin(result);
-    };
-
-    checkLogin();
-
-    const interval = setInterval(checkLogin, 5000);
-    return () => clearInterval(interval);
-  }, []);
+    if (!loading && !user) {
+      router.push("/app/login");
+    }
+  }, [loading, user, router]);
 
   const handleLogOut = async () => {
     try {
       await logout();
-      setLogin(false);
+      dispatch({ type: 'LOGOUT' }); // ユーザー情報をリセット
       router.push("/app/login");
     } catch (error) {
-      console.error(error);
+      console.error('ログアウト中にエラーが発生しました:', error);
     }
   };
 
-  if (!login) return null;
+  // ログインしていない場合はログアウトボタンを表示しない
+  if (loading || !user) return null;
 
   return (
     <button

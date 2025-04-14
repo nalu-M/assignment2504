@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import Nav from '@/app/_components/nav';
 import React from 'react';
+import { UserProvider } from "@/features/user/user-context";
 import '@/app/amplify-configure';
 
 const geistSans = Geist({
@@ -30,8 +31,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Nav />
-        {children}
+        <UserProvider>
+            <Nav />
+            {children}
+        </UserProvider>
       </body>
     </html>
   );

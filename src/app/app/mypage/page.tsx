@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from '@/hooks/use-state';
 import { useEffect } from '@/hooks/use-effect';
-import type { CognitoUser } from 'amazon-cognito-identity-js';
+import { useUserContext } from '@/features/user/user-context';
 import { getCurrentUser } from '@/lib/auth/get-current-user';
 import LogOutButton from '@/app/app/mypage/_components/logout-button';
+import type { CognitoUser } from 'amazon-cognito-identity-js';
 
 type UserAttributes = {
   sub: string;
@@ -14,29 +14,31 @@ type UserAttributes = {
 };
 
 const MyPage = () => {
-  const [user, setUser] = useState<CognitoUser | null>(null);
-  const [attributes, setAttributes] = useState<UserAttributes | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const { state, dispatch } = useUserContext();
+  const { user, attributes, error, loading } = state;
 
   useEffect(() => {
     const fetchUser = async () => {
+      dispatch({ type: 'SET_LOADING', payload: true });
       try {
         const cognitoUser = await getCurrentUser();
-        setUser(cognitoUser);
-        setAttributes(cognitoUser.attributes as UserAttributes);
-      } catch (err: unknown) {
+        dispatch({
+          type: 'SET_USER',
+          payload: {
+            user: cognitoUser,
+            attributes: cognitoUser.attributes as UserAttributes,
+          },
+        });
+      } catch (err) {
         if (err instanceof Error) {
           console.error(err.message);
         }
-        setError('ログインしていません');
-      } finally {
-        setLoading(false);
+        dispatch({ type: 'SET_ERROR', payload: 'ログインしていません' });
       }
     };
 
     fetchUser();
-  }, []);
+  }, [dispatch]);
 
   if (loading) {
     return <p className="text-center text-gray-500">loading...</p>;
